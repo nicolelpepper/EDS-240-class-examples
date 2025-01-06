@@ -1,0 +1,7 @@
+---
+title: "EDS 240 - Data Visualization & Communication"
+subtitle: "Week 1 Discussion"
+author: "Nicole Pepper"
+date: last-modified
+
+---
