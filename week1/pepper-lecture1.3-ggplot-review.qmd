@@ -352,3 +352,21 @@ ggplot( data = penguins, aes(x = flipper_length_mm, fill = species)) +
        fill = "Species",
        title = "Penguin Flipper Lengths")
 ```
+
+```{r}
+#| warning: false
+#| message: false
+ggplot( data = penguins, aes(x = flipper_length_mm)) + 
+  geom_histogram(fill = "cornflowerblue", color = "white") 
+
+ggplot( data = penguins, aes(x = flipper_length_mm, fill = species)) + 
+  geom_histogram(position = "identity", alpha = .75) + 
+  theme_minimal() + 
+  scale_fill_manual(values = c("darkorange", "purple", "cyan4")) + 
+  labs(x = "Flipper Length (mm)",
+       y = "Frequency",
+       fill = "Species",
+       title = "Penguin Flipper Lengths") + 
+  facet_wrap(~species, ncol = 1)
+```
+
