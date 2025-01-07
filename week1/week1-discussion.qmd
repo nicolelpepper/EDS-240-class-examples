@@ -3,5 +3,57 @@ title: "EDS 240 - Data Visualization & Communication"
 subtitle: "Week 1 Discussion"
 author: "Nicole Pepper"
 date: last-modified
-
+editor_options: 
+  chunk_output_type: console
 ---
+
+#### Load Libraries
+```{r}
+library(here)
+library(janitor)
+library(usdata)
+library(lubridate)
+library(dplyr)
+library(stringr)
+```
+
+#### Import Fracking Data
+```{r}
+# ---- Load data ----
+fracking <- read.csv(here::here("week1","data","registryupload_1.csv"))
+```
+
+#### Data Exploration
+```{r}
+dim(fracking) # size of dataframe
+str(fracking) # "structure" column types and first few observations
+
+```
+
+#### Clean Fracking Data
+```{r}
+fracking_clean <- fracking %>%
+  clean_names() %>%
+  mutate(job_start_date = str_remove(job_start_date, " AM")) %>%
+  mutate(datetime_start = mdy_hms(job_start_date)) %>%
+  mutate(year = year(datetime_start)) %>%
+  select(datetime_start, year, state_name, well_name, total_base_water_volume) %>%
+  mutate(state_name = str_to_title(state_name)) %>%
+  filter(!str_detect(state_name, pattern = "\\?")) %>%
+  mutate(state_name = ifelse(
+    test = str_length(state_name) == 2,
+    yes = abbr2state(state_name),
+    no = state_name
+  )) %>%
+  mutate(state_name = case_when(
+    state_name == "Colordao" ~ "Colorado",
+    state_name == "Texasa" ~ "Texas",
+    state_name == "West Viginia" ~ "West Virginia",
+    state_name == "Louisianna" ~ "Louisiana",
+    TRUE ~ state_name
+    )) %>%
+  filter(!state_name %in% c("Beaver", "Beckham", "Harper", "Hemphill","Midland","Red River", "Roosevelt","Rusk", "State", "Ward"))
+  
+
+```
+
